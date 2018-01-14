@@ -1,4 +1,14 @@
+#game {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 33% auto;
+  grid-template-rows: 50px auto;
+  grid-template-areas: 
+    "status status"
+    "pop--up game--canvas";
+}
 .status--container {
+  grid-area: status;
 	display: flex;
   background-color: #ffbfbf;
 }
@@ -7,3 +17,10 @@
     margin: auto;
     line-height: 50px;
   }
+
+.pop--up--container {
+  background-color: orange;
+}
+.canvas--container {
+  background-color: green;
+}

@@ -13,6 +13,28 @@
     .balance.status--element
       span ${{balance}}
   .pop--up--container
+    p.title Shelter
+    p.description A shelter can go a long way on a cold, stormy winter day.
+    span Number of beds available: 10
+    .pop--up--buttons
+      button.consume--button#shelter--consume--button Consume
+      button.donate--button#shelter--donate--button Donate Now!
   .canvas--container
-    canvas(id="main--canvas")
+      img#player--image(src="/images/placeholder_player.png")
+      img.action--image#shelter--image(src="/images/placeholder_shelter.png")
+      img.action--image#food--image(src="/images/placeholder_food.png")
+      img.action--image#clothing--image(src="/images/placeholder_clothing.png")
+      .action--image#housing--image
+        .action--image--content
+          .action--image--content--circle
+            <i class="material-icons">home</i>
+          span HOME
+      .action--image#work--image
+        .action--image--content
+          .action--image--content--circle
+            <i class="material-icons">work</i>
+          span WORK
+      #heart--image
+        #heart--image--content
+          <i class="material-icons">favorite</i>
   

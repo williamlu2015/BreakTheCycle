@@ -5,7 +5,13 @@ var Game = new Vue({
     status: "You're feeling cold. Find clothes or your health and stress will decrease",
     stress: "Stressed",
     health: "Unhealthy",
-    balance: 1200
+    balance: 1200,
+    currAction: "",
+    supplies: {
+      "shelter": 10,
+      "food": 10,
+      "clothing": 10
+    }
   },
   methods: {
   },

@@ -1,11 +1,11 @@
 #game {
   height: 100%;
   display: grid;
-  grid-template-columns: 33% auto;
+  grid-template-columns: auto 25%;
   grid-template-rows: 50px auto;
   grid-template-areas: 
     "status status"
-    "pop--up game--canvas";
+    "game--canvas pop--up";
 }
 .status--container {
   grid-area: status;
@@ -19,8 +19,96 @@
   }
 
 .pop--up--container {
-  background-color: orange;
+  background-color: #fff3de;
+  grid-area: pop--up;
+  position: relative;
 }
+
+.pop--up--container p, span {
+  padding: 10px
+}
+
+p.title {
+  font-size: 20px;
+  text-align: center;
+}
+
+.pop--up--buttons {
+  position: absolute;
+  bottom: 10px;
+  left: 25px;
+}
+
+.pop--up--buttons button {
+  margin: 10px;
+  padding: 10px;
+
+}
+
 .canvas--container {
-  background-color: green;
+  grid-area: game--canvas;
+  background-color: white;
+  position: relative;
 }
+  img.action {
+    width: 100px;
+    height: auto;
+  }
+  .action--image {
+    position: absolute;
+    width: 100px;
+    height: 90px;
+    background-color: grey;
+  }
+    .action--image--content {
+      text-align: center;
+      height: 100%;
+    }
+      .action--image--content--circle {
+        border-radius: 50%;
+        background-color: white;
+        width: 55px;
+        height: 55px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 5;
+        top: 15px;
+        position: relative;
+      }
+    .action--image--content span {
+      font-style: italic;
+      font-size: 11px;
+      color: white;
+      bottom: -14px;
+      position: relative;
+    }
+  #player--image {
+    width: 150px;
+    height: auto;
+    top: 300px;
+    left: 200px;
+    position: absolute;
+  }
+  #shelter--image {
+    top: 35px;
+    left: 50px;
+  }
+  #food--image {
+    top: 80px;
+    right: 350px;
+  }
+  #clothing--image {
+    top: 100px;
+    left: 550px;
+  }
+  #housing--image {
+    top: 450px;
+    left: 500px;
+  }
+  #work--image {
+    bottom: 20px;
+    left: 30px;
+  }
+  #heart--image {
+    position: absolute;
+  }

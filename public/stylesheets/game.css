@@ -58,8 +58,8 @@ p.title {
     height: auto;
   }
   .action--image {
-    width: 100px;
-    height: 90px;
+    width: 150px;
+    height: 120px;
     background-color: grey;
     margin: auto;
   }
@@ -76,22 +76,25 @@ p.title {
         margin-left: auto;
         margin-right: auto;
         line-height: 5;
-        top: 15px;
+        top: 30px;
         position: relative;
       }
     .action--image--content span {
       font-style: italic;
-      font-size: 11px;
+      font-size: 11px;  
       color: white;
-      bottom: -14px;
+      bottom: -40px;
       position: relative;
     }
   #player--image {
-    width: 100px;
+    position: absolute;
+    width: 200px;
     height: auto;
     grid-column:2;
     grid-row: 2;
     margin: auto;
+    left: 10%;
+    top: 0%;
   }
   #housing--image {
     grid-column: 1;
@@ -104,3 +107,13 @@ p.title {
     color: grey;
   }
 
+
+#heart--image {
+  position: absolute;
+  color: pink;
+  top: 50%;
+  left: 70%;
+}
+#heart--image i {
+  font-size: 50px;
+}

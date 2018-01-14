@@ -13,12 +13,19 @@
     .balance.status--element
       span ${{balance}}
   .pop--up--container
-    p.title Shelter
-    p.description A shelter can go a long way on a cold, stormy winter day.
-    span Number of beds available: 10
-    .pop--up--buttons
-      button.consume--button#shelter--consume--button Consume
-      button.donate--button#shelter--donate--button Donate Now!
+    p.title {{popupTitles[currAction]}}
+    p.description {{ popupDescriptions[currAction] }}
+    span {{ supplyMessages[currAction] }}: {{ supplies[currAction] }}
+
+    .pop--up--buttons(v-if="currAction == 0 ")
+      button.consume--button#shelter--consume--button(@click="consumeShelter()") Consume
+      button.donate--button#shelter--donate--button(@click="donateShelter()") Donate Now!
+    .pop--up--buttons(v-else-if="currAction == 1 ")
+      button.consume--button#shelter--consume--button(@click="consumeFB()") Consume
+      button.donate--button#shelter--donate--button(@click="donateFB()") Donate Now!
+    .pop--up--buttons(v-else-if="currAction == 2 ")
+      button.consume--button#shelter--consume--button(@click="consumeClothing()") Consume
+      button.donate--button#shelter--donate--button(@click="donateClothing()") Donate Now!
   .canvas--container
       img#player--image(src="/images/placeholder_player.png")
       img.action--image#shelter--image(src="/images/placeholder_shelter.png")

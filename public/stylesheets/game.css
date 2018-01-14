@@ -96,6 +96,7 @@ p.title {
     margin: auto;
     left: 10%;
     top: 0%;
+    border-radius: 50%;
   }
   #housing--image {
     grid-column: 1;

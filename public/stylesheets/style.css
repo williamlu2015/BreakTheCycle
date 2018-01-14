@@ -1,0 +1,23 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+button {
+	background-color: #5e74ff;
+	border-radius: 5px;
+	border: 1px solid #2f4bfa;
+	cursor: pointer;
+	color: #ffffff;
+	padding: 20px;
+	text-decoration: none;
+	font-size: 1.25rem;
+}
+
+button:hover {
+	background-color: #2f4bfa;
+}
+

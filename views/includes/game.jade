@@ -23,6 +23,10 @@
       span Healthy
     .health.status--element(v-if="!health")
       span Unhealthy
+    .home.status--element(v-if="home")
+      span Has home
+    .home.status--element(v-if="!home")
+      span No home
     .balance.status--element
       span ${{balance}}
   .pop--up--container
@@ -39,17 +43,21 @@
     .pop--up--buttons(v-else-if="currAction == 2 ")
       button.consume--button#shelter--consume--button(@click="consumeClothing()") Consume
       button.donate--button#shelter--donate--button(@click="donateClothing()") Donate Now!
+    .pop--up--buttons(v-else-if="currAction == 3 ")
+      button.find--button#find--home--button(@click="findHome()") Find a Home
+    .pop--up--buttons(v-else-if="currAction == 4" )
+      button.find--button#find--job--button(@click="findJob()") Find a Job
   .canvas--container
       img#player--image(src="/images/placeholder_player.png")
       img.action--image#shelter--image(src="/images/placeholder_shelter.png" @click="toggleAction(0)")
       img.action--image#food--image(src="/images/placeholder_food.png" @click="toggleAction(1)")
       img.action--image#clothing--image(src="/images/placeholder_clothing.png" @click="toggleAction(2)")
-      .action--image#housing--image
+      .action--image#housing--image(@click="toggleAction(3)")
         .action--image--content
           .action--image--content--circle
             <i class="material-icons">home</i>
           span HOME
-      .action--image#work--image
+      .action--image#work--image(@click="toggleAction(4)")
         .action--image--content
           .action--image--content--circle
             <i class="material-icons">work</i>

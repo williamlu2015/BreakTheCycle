@@ -6,19 +6,24 @@ var Game = new Vue({
     status: 0,   // 0: all good, 1: need food, 2: need clothing, 3: need both
     stress: true,   // true = unstressed, false = stressed
     health: true,   // true = healthy, false = unhealthy
+    home: false,   // true if player has found a home
     balance: 1200,
-    currAction: 2,
+    currAction: -1,
     supplies: [10, 10, 10], //Refers to shelter, food, clothing
-    popupTitles: ['Shelter', 'Food Bank', 'Clothing Donation'],
+    popupTitles: ['Shelter', 'Food Bank', 'Clothing Donation', "Find a Home", "Find a Job"],
     popupDescriptions: [
       'A warm shelter can go a long way on a cold winter day',
-      'Food bank description',
-      'Clothing donation'
+      'Due to the kindness of your community, a hot meal awaits you today',
+      'Thanks to donation and recycling efforts, you can find used clothes here',
+      "Find a permanent home to break the cycle and work towards a job",
+      "Find a job to break the cycle and claim your place on the hall of fame"
     ],
     supplyMessages: [
       'The number of beds available is',
       'The amount of food available is',
-      'The number of clothing available is'
+      'The number of clothing available is',
+      "You need a balance of $2000 to find a home",
+      "You need a home and a balance of $1000 to find a job"
     ],
     instance: {},
   },
@@ -133,7 +138,7 @@ Game.consumeClothing = function() {
     if (_this.status == 2) {
       _this.status = 0;
     } else if (_this.status == 3) {
-      _this.status = 2;
+      _this.status = 1;
     }
     _this.stress = true;
 
@@ -167,6 +172,35 @@ Game.donateClothing = function() {
   web3.eth.sendTransaction({from: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57', to : '0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE', gas: 21000, gasPrice: web3.toWei(1, 'gwei'), value: 1000000000000000000})
 }
 
+Game.findHome = function() {
+  if (this.home) {
+    alert("You already have a home");
+    return;
+  }
+  if (this.balance < 1300) {
+    alert("Not enough money");
+    return;
+  }
+  this.balance -= 1300;
+  this.home = true;
+}
+
+Game.findJob = function() {
+  // note: if the player already has a job, the game would have ended
+
+  if (!this.home) {
+    alert("You need a home to get a job");
+    return;
+  }
+
+  if (this.balance < 100) {
+    alert("Not enough money");
+    return;
+  }
+  this.balance -= 100;
+
+  // TODO: end the game when the player has a job
+}
 
 Game.toggleAction = function(action) { 
   this.currAction = action;

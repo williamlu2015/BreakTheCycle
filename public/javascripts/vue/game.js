@@ -27,7 +27,6 @@ var Game = new Vue({
 
 })
 
-
 var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
 abi = JSON.parse('[{"constant":false,"inputs":[{"name":"value","type":"uint256"}],"name":"donateClothing","outputs":[{"name":"","type":"uint256"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[],"name":"getClothing","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"clothing","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"consumeFB","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"getFoodBank","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"value","type":"uint256"}],"name":"donateShelter","outputs":[{"name":"","type":"uint256"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"value","type":"uint256"}],"name":"donateFB","outputs":[{"name":"","type":"uint256"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[],"name":"consumeShelter","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"playerList","outputs":[{"name":"balance","type":"uint256"},{"name":"health","type":"uint256"},{"name":"stress","type":"uint256"},{"name":"status","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"foodBank","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"shelter","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"consumeClothing","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"getShelter","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"carePackage","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]');
 CommunityContract = web3.eth.contract(abi);
@@ -71,19 +70,21 @@ Game.consumeShelter = function () {
 
 Game.donateShelter = function () {
   var _this = this;
-  this.instance.donateShelter(1, {from: web3.eth.accounts[0]}, function() {
-    x = _this.instance.donateShelter.call(1, {from: web3.eth.accounts[0]}).toString();
+  this.instance.donateShelter(1, {from: web3.eth.accounts[1]}, function() {
+    x = _this.instance.donateShelter.call(1, {from: web3.eth.accounts[1]}).toString();
     _this.supplies[0] += parseInt(x);
     console.log("Donated: ", x);
     _this.$forceUpdate();
   })
+
+  web3.eth.sendTransaction({from: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57', to : '0x0F4F2Ac550A1b4e2280d04c21cEa7EBD822934b5', gas: 21000, gasPrice: web3.toWei(1, 'gwei'), value: 1000000000000000000})
 }
 
 
 Game.consumeFB = function() {
   var _this = this;  
   this.instance.consumeFB({from: web3.eth.accounts[0]}, function() {
-    _this.supplies[1] = _this.instance.getFoodBank.call({from: web3.eth.accounts[0]}).toString();
+    _this.supplies[1] = parseInt(_this.instance.getFoodBank.call({from: web3.eth.accounts[0]}).toString());
     console.log("supplies[1]", _this.supplies[1]);
 
     // If state is "need food" (1 or 3), set it to "don't need food" (0 or 2)
@@ -119,12 +120,14 @@ Game.donateFB = function() {
     console.log("Donated: ", x);
     _this.$forceUpdate();
   })
+
+  web3.eth.sendTransaction({from: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57', to : '0x6330A553Fc93768F612722BB8c2eC78aC90B3bbc', gas: 21000, gasPrice: web3.toWei(1, 'gwei'), value: 1000000000000000000})
 }
 
 Game.consumeClothing = function() {
   var _this = this;
   this.instance.consumeClothing({from: web3.eth.accounts[0]}, function() {
-    _this.supplies[2] = _this.instance.getClothing.call({from: web3.eth.accounts[0]}).toString();
+    _this.supplies[2] = parseInt(_this.instance.getClothing.call({from: web3.eth.accounts[0]}).toString());
     console.log("supplies[2]", _this.supplies[2]);
 
     if (_this.status == 2) {
@@ -156,11 +159,12 @@ Game.consumeClothing = function() {
 Game.donateClothing = function() {
   var _this = this;
   this.instance.donateClothing(1, {from: web3.eth.accounts[0]}, function() {
-    x = _this.instance.donateClothing.call(1, {from: web3.eth.accounts[0]}).toString();
+    x = parseInt(_this.instance.donateClothing.call(1, {from: web3.eth.accounts[0]}).toString());
     _this.supplies[2] += parseInt(x);
     console.log("Donated: ", x);
     _this.$forceUpdate();
   })
+  web3.eth.sendTransaction({from: '0x627306090abaB3A6e1400e9345bC60c78a8BEf57', to : '0x5AEDA56215b167893e80B4fE645BA6d5Bab767DE', gas: 21000, gasPrice: web3.toWei(1, 'gwei'), value: 1000000000000000000})
 }
 
 

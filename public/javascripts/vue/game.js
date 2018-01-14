@@ -46,6 +46,11 @@ Game.$forceUpdate();
 // Used for testing purposes
 //   button(v-on:click="doSomething()") Something
 Game.consumeShelter = function () {
+  if (!this.supplies[0]) {
+    alert("It's subzero outside and the shelters have no more space. Donate to the Covenent House to help house vulnerable youth today.");
+    return;
+  }
+
   var _this = this;
   this.instance.consumeShelter({from: web3.eth.accounts[0]}, function() {
     _this.supplies[0] = parseInt(_this.instance.getShelter.call({from: web3.eth.accounts[0]}).toString());
@@ -87,6 +92,11 @@ Game.donateShelter = function () {
 
 
 Game.consumeFB = function() {
+  if (!this.supplies[1]) {
+    alert("The Food Bank is running low. Each week 27,000 rely on the Greater Vancouver Food Bank alone. Donate now to the food bank.")
+    return;
+  }
+  
   var _this = this;  
   this.instance.consumeFB({from: web3.eth.accounts[0]}, function() {
     _this.supplies[1] = parseInt(_this.instance.getFoodBank.call({from: web3.eth.accounts[0]}).toString());

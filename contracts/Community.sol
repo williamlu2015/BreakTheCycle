@@ -37,7 +37,7 @@ contract Community {
 
     function donateShelter(uint value) payable public returns (uint) {
 
-        uint EXCHANGE_RATE = 100;
+        uint EXCHANGE_RATE = 1;
         uint amount = value * EXCHANGE_RATE;
         // TODO: track how much every person's donated
         shelter = shelter + amount;
@@ -59,7 +59,7 @@ contract Community {
 
     function donateFB(uint value) payable public returns (uint) {
 
-        uint EXCHANGE_RATE = 100;
+        uint EXCHANGE_RATE = 1;
         uint amount = value * EXCHANGE_RATE;
         // TODO: track how much every person's donated
         foodBank = foodBank + amount;
@@ -81,7 +81,7 @@ contract Community {
 
     function donateClothing(uint value) payable public returns (uint) {
         
-        uint EXCHANGE_RATE = 100;
+        uint EXCHANGE_RATE = 1;
         uint amount = value * EXCHANGE_RATE;
         // TODO: track how much every person's donated
         clothing = clothing + amount;

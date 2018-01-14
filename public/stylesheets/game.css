@@ -49,17 +49,21 @@ p.title {
   grid-area: game--canvas;
   background-color: white;
   position: relative;
+  display: grid;
+  grid-template-columns: 33% 33% 32%;
+  grid-template-rows: 50% auto;
 }
   img.action {
     width: 100px;
     height: auto;
   }
   .action--image {
-    position: absolute;
     width: 100px;
     height: 90px;
     background-color: grey;
+    margin: auto;
   }
+
     .action--image--content {
       text-align: center;
       height: 100%;
@@ -83,32 +87,20 @@ p.title {
       position: relative;
     }
   #player--image {
-    width: 150px;
+    width: 100px;
     height: auto;
-    top: 300px;
-    left: 200px;
-    position: absolute;
-  }
-  #shelter--image {
-    top: 35px;
-    left: 50px;
-  }
-  #food--image {
-    top: 80px;
-    right: 350px;
-  }
-  #clothing--image {
-    top: 100px;
-    left: 550px;
+    grid-column:2;
+    grid-row: 2;
+    margin: auto;
   }
   #housing--image {
-    top: 450px;
-    left: 500px;
+    grid-column: 1;
+    background-color: orange;
+    color: orange;
   }
+
   #work--image {
-    bottom: 20px;
-    left: 30px;
+    grid-column: 3;
+    color: grey;
   }
-  #heart--image {
-    position: absolute;
-  }
+

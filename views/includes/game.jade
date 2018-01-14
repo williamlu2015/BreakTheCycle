@@ -1,0 +1,17 @@
+#game
+  .status--container
+    .day.status--element
+      span Day:
+      span {{day}}
+    .status--message.status--element
+      span Status:
+      span {{status}}
+    .stress.status--element
+      span {{stress}}
+    .health.status--element
+      span {{health}}
+    .balance.status--element
+      span ${{balance}}
+  .canvas--container
+    canvas(id="main--canvas")
+  button(v-on:click="doSomething()") Something

@@ -1,0 +1,9 @@
+.status--container {
+	display: flex;
+  background-color: #ffbfbf;
+}
+  .status--element {
+    height: 50px;
+    margin: auto;
+    line-height: 50px;
+  }

@@ -52,6 +52,7 @@ p.title {
   display: grid;
   grid-template-columns: 33% 33% 32%;
   grid-template-rows: 50% auto;
+  background-color: #4d4d57;
 }
   img.action {
     width: 100px;

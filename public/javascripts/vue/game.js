@@ -1,10 +1,11 @@
 var Game = new Vue({
   el: '#game',
   data: {
-    day: 2,
-    status: "You're feeling cold. Find clothes or your health and stress will decrease",
-    stress: "Stressed",
-    health: "Unhealthy",
+    day: 1,
+    time: false,   // false = early morning, true = late day
+    status: 0,   // 0: all good, 1: need food, 2: need clothing, 3: need both
+    stress: true,   // true = unstressed, false = stressed
+    health: true,   // true = healthy, false = unhealthy
     balance: 1200,
     currAction: 2,
     supplies: [10, 10, 10], //Refers to shelter, food, clothing
@@ -28,58 +29,141 @@ var Game = new Vue({
 
 
 var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
-abi = JSON.parse('[{"constant":true,"inputs":[],"name":"clothing","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"value","type":"uint256"}],"name":"donateShelter","outputs":[{"name":"","type":"uint256"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[],"name":"consumeShelter","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"playerList","outputs":[{"name":"balance","type":"uint256"},{"name":"health","type":"uint256"},{"name":"stress","type":"uint256"},{"name":"status","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"foodBank","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"shelter","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"getShelter","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"carePackage","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]');
+abi = JSON.parse('[{"constant":false,"inputs":[{"name":"value","type":"uint256"}],"name":"donateClothing","outputs":[{"name":"","type":"uint256"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[],"name":"getClothing","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"clothing","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"consumeFB","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"getFoodBank","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"value","type":"uint256"}],"name":"donateShelter","outputs":[{"name":"","type":"uint256"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"value","type":"uint256"}],"name":"donateFB","outputs":[{"name":"","type":"uint256"}],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[],"name":"consumeShelter","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"playerList","outputs":[{"name":"balance","type":"uint256"},{"name":"health","type":"uint256"},{"name":"stress","type":"uint256"},{"name":"status","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"foodBank","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"shelter","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"consumeClothing","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"getShelter","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"carePackage","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]');
 CommunityContract = web3.eth.contract(abi);
-Game.instance = CommunityContract.at('0x7153ccd1a20bbb2f6dc89c1024de368326ec6b4f');
+Game.instance = CommunityContract.at('0x51815cebef59b88dafd1a5f24095eee1236ffcdd');
+
+//Initializing
+Game.supplies[0] = parseInt(Game.instance.getShelter.call({from: web3.eth.accounts[0]}).toString());
+Game.supplies[1] = parseInt(Game.instance.getFoodBank.call({from: web3.eth.accounts[0]}).toString());
+Game.supplies[2] = parseInt(Game.instance.getClothing.call({from: web3.eth.accounts[0]}).toString());
+Game.$forceUpdate();
 
 // Used for testing purposes
 //   button(v-on:click="doSomething()") Something
 Game.consumeShelter = function () {
-  _this = this;  
-  //TODO encapsulate in function
+  var _this = this;
   this.instance.consumeShelter({from: web3.eth.accounts[0]}, function() {
-    x = _this.instance.consumeShelter.call({from: web3.eth.accounts[0]}).toString();
-    console.log("X:", x);
+    _this.supplies[0] = parseInt(_this.instance.getShelter.call({from: web3.eth.accounts[0]}).toString());
+    console.log("supplies[0]", _this.supplies[0]);
+    if (_this.time) {
+      _this.day++;
+
+      // Check if player's state is "all good" and increase balance if so
+      if (_this.status == 0 && _this.stress && _this.health) {
+        _this.balance += 25;
+      } else if (_this.status == 1 || _this.status == 3) {
+        _this.health = false;
+      }
+      if (_this.status == 2 || _this.status == 3) {
+        _this.stress = false;
+      }
+
+      // Randomly generate state for next day
+      _this.status = Math.floor(4 * Math.random());
+    }
+    _this.time = !_this.time;
+    _this.$forceUpdate();
   })
+
 }
 
 
 Game.donateShelter = function () {
-  _this = this;
+  var _this = this;
   this.instance.donateShelter(1, {from: web3.eth.accounts[0]}, function() {
     x = _this.instance.donateShelter.call(1, {from: web3.eth.accounts[0]}).toString();
+    _this.supplies[0] += parseInt(x);
     console.log("Donated: ", x);
+    _this.$forceUpdate();
   })
 }
 
 
 Game.consumeFB = function() {
-  _this = this;  
-  //TODO encapsulate in function
+  var _this = this;  
   this.instance.consumeFB({from: web3.eth.accounts[0]}, function() {
-    x = _this.instance.consumeFB.call({from: web3.eth.accounts[0]}).toString();
+    _this.supplies[1] = _this.instance.getFoodBank.call({from: web3.eth.accounts[0]}).toString();
+    console.log("supplies[1]", _this.supplies[1]);
+
+    // If state is "need food" (1 or 3), set it to "don't need food" (0 or 2)
+    if (_this.status == 1 || _this.status == 3) {
+      _this.status--;
+    }
+    _this.health = true;
+
+    if (_this.time) {
+      _this.day++;
+
+      if (_this.status == 0 && _this.stress && _this.health) {
+        _this.balance += 25;
+      } else if (_this.status == 1 || _this.status == 3) {
+        _this.health = false;
+      }
+      if (_this.status == 2 || _this.status == 3) {
+        _this.stress = false;
+      }
+
+      _this.status = Math.floor(4 * Math.random());
+    }
+    _this.time = !_this.time;
+    _this.$forceUpdate();
   })
 }
 
 Game.donateFB = function() {
-  _this = this;
+  var _this = this;
   this.instance.donateFB(1, {from: web3.eth.accounts[0]}, function() {
     x = _this.instance.donateFB.call(1, {from: web3.eth.accounts[0]}).toString();
+    _this.supplies[1] += parseInt(x);
     console.log("Donated: ", x);
+    _this.$forceUpdate();
   })
 }
 
 Game.consumeClothing = function() {
-  //TODO encapsulate in function
+  var _this = this;
   this.instance.consumeClothing({from: web3.eth.accounts[0]}, function() {
-    x = _this.instance.consumeClothing.call({from: web3.eth.accounts[0]}).toString();
-    console.log("X:", x);
+    _this.supplies[2] = _this.instance.getClothing.call({from: web3.eth.accounts[0]}).toString();
+    console.log("supplies[2]", _this.supplies[2]);
+
+    if (_this.status == 2) {
+      _this.status = 0;
+    } else if (_this.status == 3) {
+      _this.status = 2;
+    }
+    _this.stress = true;
+
+    if (_this.time) {
+      _this.day++;
+
+      if (_this.status == 0 && _this.stress && _this.health) {
+        _this.balance += 25;
+      } else if (_this.status == 1 || _this.status == 3) {
+        _this.health = false;
+      }
+      if (_this.status == 2 || _this.status == 3) {
+        _this.stress = false;
+      }
+
+      _this.status = Math.floor(4 * Math.random());
+    }
+    _this.time = !_this.time;
+    _this.$forceUpdate();
   })
 }
 
 Game.donateClothing = function() {
+  var _this = this;
   this.instance.donateClothing(1, {from: web3.eth.accounts[0]}, function() {
     x = _this.instance.donateClothing.call(1, {from: web3.eth.accounts[0]}).toString();
+    _this.supplies[2] += parseInt(x);
     console.log("Donated: ", x);
+    _this.$forceUpdate();
   })
+}
+
+
+Game.toggleAction = function(action) { 
+  this.currAction = action;
 }

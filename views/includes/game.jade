@@ -3,13 +3,26 @@
     .day.status--element
       span Day:
       span {{day}}
-    .status--message.status--element
+    .status--message.status--element(v-if="status == 0")
       span Status:
-      span {{status}}
-    .stress.status--element
-      span {{stress}}
-    .health.status--element
-      span {{health}}
+      span You're all good
+    .status--message.status--element(v-if="status == 1")
+      span Status:
+      span You're feeling hungry. Find food or your health will decrease.
+    .status--message.status--element(v-if="status == 2")
+      span Status:
+      span You're feeling cold. Find clothing or your stress will increase.
+    .status--message.status--element(v-if="status == 3")
+      span Status:
+      span You're feeling hungry and cold. Find food and clothing.
+    .stress.status--element(v-if="stress")
+      span Unstressed
+    .stress.status--element(v-if="!stress")
+      span Stressed
+    .health.status--element(v-if="health")
+      span Healthy
+    .health.status--element(v-if="!health")
+      span Unhealthy
     .balance.status--element
       span ${{balance}}
   .pop--up--container
@@ -28,9 +41,9 @@
       button.donate--button#shelter--donate--button(@click="donateClothing()") Donate Now!
   .canvas--container
       img#player--image(src="/images/placeholder_player.png")
-      img.action--image#shelter--image(src="/images/placeholder_shelter.png")
-      img.action--image#food--image(src="/images/placeholder_food.png")
-      img.action--image#clothing--image(src="/images/placeholder_clothing.png")
+      img.action--image#shelter--image(src="/images/placeholder_shelter.png" @click="toggleAction(0)")
+      img.action--image#food--image(src="/images/placeholder_food.png" @click="toggleAction(1)")
+      img.action--image#clothing--image(src="/images/placeholder_clothing.png" @click="toggleAction(2)")
       .action--image#housing--image
         .action--image--content
           .action--image--content--circle

@@ -46,4 +46,46 @@ contract Community {
     function getShelter() public returns (uint) {
         return shelter;
     }
+
+    function consumeFB() public returns (uint) {
+        if (foodBank == 0) {
+            return 0;
+        }
+
+        foodBank--;
+        return foodBank;
+    }
+
+    function donateFB(uint value) payable public returns (uint) {
+        uint EXCHANGE_RATE = 100;
+        uint amount = value * EXCHANGE_RATE;
+        // TODO: track how much every person's donated
+        foodBank = foodBank + amount;
+        return amount;
+    }
+
+    function getFoodBank() public returns (uint) {
+        return foodBank;
+    }
+
+    function consumeClothing() public returns (uint) {
+        if (clothing == 0) {
+            return 0;
+        }
+
+        clothing--;
+        return clothing;
+    }
+
+    function donateClothing(uint value) payable public returns (uint) {
+        uint EXCHANGE_RATE = 100;
+        uint amount = value * EXCHANGE_RATE;
+        // TODO: track how much every person's donated
+        clothing = clothing + amount;
+        return amount;
+    }
+
+    function getClothing() public returns (uint) {
+        return clothing;
+    }
 }
